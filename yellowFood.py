@@ -2,9 +2,14 @@ import sys
 import webbrowser
 from rtmapi import Rtm
 
+import arrow
 
 from trello import TrelloApi
 import json
+
+from datetime import datetime
+
+import datetime
 
 TRELLO_APP_KEY='b730b6c72f876470a8c4cbf5ebe41dc0'
 
@@ -29,11 +34,17 @@ for l in lists:
     print l['name']
 
 
+date = datetime.date.today()
+start_week = date - datetime.timedelta(date.weekday())
+end_week = start_week + datetime.timedelta(7)
+
 for c in cards:
     date = c['due']
     if date != None:
-        print date
-        print c['name']
+    	ndate = datetime.strptime(date, '%Y-%m-%dT%H:%M:%S.%fZ')
+        if ndate < end_week and ndate > start_week:
+        	print ndate
+        	print c['name']
 
 #print cards[0]
 
@@ -44,7 +55,10 @@ print cards[0]['due']
 # get those parameters from http://www.rememberthemilk.com/services/api/keys.rtm
 api_key = 'b19b027b96334359aec524dc86c2dae7'
 shared_secret = '5ae70fe5149cbafc'
-token = sys.argv[3] if len(sys.argv) >= 4 else None
+
+#####token = sys.argv[3] if len(sys.argv) >= 4 else None
+
+token = '8d72f9b0316ac225faf1309833c5e5b0068f86e4'
 api = Rtm(api_key, shared_secret, "delete", token)
     
 # authenication block, see http://www.rememberthemilk.com/services/api/authentication.rtm
